@@ -4,6 +4,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
 import { JwtMiddleware } from './jwt.middleware';
+import { PrismaService } from '../prisma/prisma.service';
 
 export const jwtSecret = 'zjP9h6ZI5LoSKCRj';
 
@@ -16,7 +17,7 @@ export const jwtSecret = 'zjP9h6ZI5LoSKCRj';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtMiddleware],
+  providers: [AuthService, JwtMiddleware, PrismaService],
   exports: [JwtMiddleware],
 })
 export class AuthModule {}
