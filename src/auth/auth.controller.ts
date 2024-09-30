@@ -3,7 +3,6 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto';
 import { AuthEntity } from './auth.entity';
 import { RegisterDto } from './dto';
-import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +16,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('register')
-  signUp(@Body() body: RegisterDto): Promise<User> {
+  signUp(@Body() body: RegisterDto): Promise<AuthEntity> {
     return this.authService.signUp(body);
   }
 }

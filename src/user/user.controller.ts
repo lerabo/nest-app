@@ -19,7 +19,6 @@ export class UserController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() user: User): Promise<User> {
-    console.log(user);
     return this.userService.create(user);
   }
 
@@ -30,7 +29,9 @@ export class UserController {
   }
 
   @Get(':id')
-  getPostById(@Param('id', ParseIntPipe) id: number): Promise<User> {
+  getPostById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Omit<User, 'password'>> {
     return this.userService.getUserById(id);
   }
 

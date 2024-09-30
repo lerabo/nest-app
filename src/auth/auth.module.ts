@@ -6,7 +6,7 @@ import { UserModule } from '../user/user.module';
 import { JwtMiddleware } from './jwt.middleware';
 import { PrismaService } from '../prisma/prisma.service';
 
-export const jwtSecret = 'zjP9h6ZI5LoSKCRj';
+export const jwtSecret = process.env.JWT_SECRET;
 
 @Module({
   imports: [

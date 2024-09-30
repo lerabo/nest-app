@@ -6,7 +6,6 @@ import {
 
 import { NextFunction } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import process from 'node:process';
 
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
@@ -19,10 +18,9 @@ export class JwtMiddleware implements NestMiddleware {
     }
 
     try {
-      const decoded = this.jwtService.verify(token, {
+      req['user'] = this.jwtService.verify(token, {
         publicKey: process.env.JWT_SECRET,
       });
-      req['user'] = decoded;
       next();
     } catch (error) {
       throw new UnauthorizedException(error);
