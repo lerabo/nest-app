@@ -9,13 +9,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post('login')
+  @Post('signIn')
   signIn(@Body() { email, password }: LoginDto): Promise<AuthEntity> {
     return this.authService.signIn(email, password);
   }
 
   @HttpCode(HttpStatus.OK)
-  @Post('register')
+  @Post('sighUp')
   signUp(@Body() body: RegisterDto): Promise<AuthEntity> {
     return this.authService.signUp(body);
   }

@@ -49,6 +49,7 @@ export class AuthService {
     email,
     name,
     jobTitle,
+    surname,
   }: RegisterDto): Promise<AuthEntity> {
     const hashPass = await bcrypt.hash(userPassword, saltOrRounds);
 
@@ -56,7 +57,8 @@ export class AuthService {
       data: {
         email,
         name,
-        jobTitle,
+        surname,
+        jobTitle: jobTitle,
         password: hashPass,
       },
     });

@@ -15,17 +15,12 @@ export class UserService {
   }
 
   async getUserById(id: number): Promise<Omit<User, 'password'>> {
-    return this.prisma.user.findUnique({
-      select: {
-        name: true,
-        id: true,
-        email: true,
-        jobTitle: true,
-        posts: true,
-        created_at: true,
-      },
-      where: { id: id },
+    const user = await this.prisma.user.findUnique({
+      where: { id },
     });
+    delete user.password;
+
+    return user;
   }
 
   async remove(id: number) {
