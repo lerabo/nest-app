@@ -39,7 +39,7 @@ export class AuthService {
 
     return {
       token: this.jwtService.sign(
-        { userId: user.id, email: user.email },
+        { id: user.id, email: user.email },
         { privateKey: process.env.JWT_SECRET },
       ),
       user: user,
@@ -70,7 +70,7 @@ export class AuthService {
 
       return {
         token: this.jwtService.sign(
-          { userId: user.id },
+          { id: user.id, email: user.email },
           { privateKey: process.env.JWT_SECRET },
         ),
         user: user,
