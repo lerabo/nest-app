@@ -15,6 +15,7 @@ model User {
   jobTitle String?
   password String
   posts Post[]
+  avatar String?
   created_at DateTime @default(now())
 }
 
