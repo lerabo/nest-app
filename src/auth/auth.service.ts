@@ -1,8 +1,10 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -34,13 +36,14 @@ export class AuthService {
       throw new HttpException('Passwords do not match', HttpStatus.FORBIDDEN);
     }
 
-    const { password, ...rest } = user;
+    delete user.password;
+
     return {
       token: this.jwtService.sign(
         { userId: user.id },
         { privateKey: process.env.JWT_SECRET },
       ),
-      user: rest,
+      user: user,
     };
   }
 
@@ -51,26 +54,30 @@ export class AuthService {
     jobTitle,
     surname,
   }: RegisterDto): Promise<AuthEntity> {
-    const hashPass = await bcrypt.hash(userPassword, saltOrRounds);
+    try {
+      const hashPass = await bcrypt.hash(userPassword, saltOrRounds);
 
-    const user = await this.prisma.user.create({
-      data: {
-        email,
-        name,
-        surname,
-        jobTitle: jobTitle,
-        password: hashPass,
-      },
-    });
+      const user = await this.prisma.user.create({
+        data: {
+          email,
+          name,
+          surname,
+          jobTitle: jobTitle,
+          password: hashPass,
+        },
+      });
 
-    const { password, ...rest } = user;
+      delete user.password;
 
-    return {
-      token: this.jwtService.sign(
-        { userId: user.id },
-        { privateKey: process.env.JWT_SECRET },
-      ),
-      user: rest,
-    };
+      return {
+        token: this.jwtService.sign(
+          { userId: user.id },
+          { privateKey: process.env.JWT_SECRET },
+        ),
+        user: user,
+      };
+    } catch {
+      throw new BadRequestException(`User already exists with email ${email}`);
+    }
   }
 }
