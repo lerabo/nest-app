@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
 
@@ -15,12 +15,17 @@ export class UserService {
   }
 
   async getUserById(id: number): Promise<Omit<User, 'password'>> {
-    const user = await this.prisma.user.findUnique({
-      where: { id },
-    });
-    delete user.password;
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { id },
+      });
 
-    return user;
+      delete user.password;
+
+      return user;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async remove(id: number) {

@@ -4,7 +4,6 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -40,7 +39,7 @@ export class AuthService {
 
     return {
       token: this.jwtService.sign(
-        { userId: user.id },
+        { userId: user.id, email: user.email },
         { privateKey: process.env.JWT_SECRET },
       ),
       user: user,
